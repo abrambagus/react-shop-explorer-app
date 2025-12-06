@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   Card,
   CardActionArea,
@@ -13,8 +14,12 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
+    <Card sx={{ maxWidth: 345, height: "100%" }}>
+      <CardActionArea
+        component={Link}
+        to={`/product/${product.id}`}
+        sx={{ height: "100%" }}
+      >
         <CardMedia
           component="img"
           height="300"

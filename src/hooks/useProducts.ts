@@ -23,6 +23,16 @@ const fetchProducts = async ({
   return response.json();
 };
 
+const fetchProduct = async (id: number): Promise<Product> => {
+  const response = await fetch(
+    `https://api.escuelajs.co/api/v1/products/${id}`
+  );
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 const fetchCategoryProducts = async (): Promise<Category[]> => {
   const response = await fetch("https://api.escuelajs.co/api/v1/categories");
   if (!response.ok) {
@@ -48,5 +58,13 @@ export const useCategoryProducts = () => {
   return useQuery({
     queryKey: ["category-products"],
     queryFn: fetchCategoryProducts,
+  });
+};
+
+export const useProduct = (id: number) => {
+  return useQuery({
+    queryKey: ["product", id],
+    queryFn: () => fetchProduct(id),
+    enabled: !!id,
   });
 };
