@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Shop Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikasi e-commerce sederhana untuk mencari dan mengelola keranjang belanja produk.
 
-Currently, two official plugins are available:
+## Instruksi Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1.  **Install Dependencies:**
 
-## React Compiler
+    ```bash
+    npm install
+    ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2.  **Jalankan Aplikasi (Mode Development):**
 
-## Expanding the ESLint configuration
+    ```bash
+    npm run dev
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Pendekatan & Keputusan Teknis
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1.  **State Management (Zustand):**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+    - Dipilih karena ringan dan mudah digunakan dibanding Redux.
+    - Fitur **Persistence** (`localStorage`) diimplementasikan agar data keranjang tidak hilang saat refresh halaman.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **User Experience (UX):**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+    - **Optimistic Updates:** Notifikasi (Snackbar) muncul secara instan saat menambah barang untuk respon yang cepat.
+    - **Feedback:** Indikator jumlah barang (Badge) di icon cart memudahkan user memantau belanjaan.
+    - **Subtotal & Total:** Menampilkan rincian harga per item dan total keseluruhan di halaman Cart.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3.  **Struktur Kode:**
+    - Struktur folder dipisahkan secara logis (`pages`, `store`, `hooks`, `components`) agar mudah dibaca dan dimaintain

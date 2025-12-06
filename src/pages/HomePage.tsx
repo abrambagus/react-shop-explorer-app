@@ -13,14 +13,20 @@ import {
   Select,
   MenuItem,
   type SelectChangeEvent,
+  IconButton,
+  Badge,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Link } from "react-router-dom";
 import { useProducts, useCategoryProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
+import { useCartStore } from "../store/cartStore";
 
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | number>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const { getTotalItems } = useCartStore();
 
   const handleCategoryChange = (event: SelectChangeEvent<string | number>) => {
     setSelectedCategory(event.target.value);
@@ -40,15 +46,30 @@ function HomePage() {
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", py: 4 }}>
       <Container maxWidth="lg">
-        <Typography
-          variant="h3"
-          component="h1"
-          gutterBottom
-          color="primary"
-          sx={{ mb: 4, fontWeight: "bold" }}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
         >
-          Shop Explorer
-        </Typography>
+          <Typography variant="h3" color="primary" sx={{ fontWeight: "bold" }}>
+            Shop Explorer
+          </Typography>
+
+          <IconButton
+            component={Link}
+            to="/cart"
+            color="primary"
+            size="large"
+            sx={{ bgcolor: "background.paper", boxShadow: 3 }}
+          >
+            <Badge badgeContent={getTotalItems()} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+        </Box>
 
         <Box sx={{ mb: 4, display: "flex", gap: 2 }}>
           <TextField

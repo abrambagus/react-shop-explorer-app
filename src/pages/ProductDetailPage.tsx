@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -9,13 +10,24 @@ import {
   Grid,
   Card,
   CardMedia,
+  Snackbar,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useProduct } from "../hooks/useProducts";
+import { useCartStore } from "../store/cartStore";
+import type { Product } from "../types/product";
 
 function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const productId = Number(id);
+  const { setAddToCart } = useCartStore();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleAddToCart = (product: Product) => {
+    setAddToCart(product);
+    setOpenSnackbar(true);
+  };
 
   const { data: product, isLoading, isError, error } = useProduct(productId);
 
@@ -113,6 +125,18 @@ function ProductDetailPage() {
           </Box>
 
           <Box sx={{ mb: 3 }}>
+            <Button
+              variant="contained"
+              startIcon={<ShoppingCartIcon />}
+              size="large"
+              onClick={() => handleAddToCart(product)}
+              sx={{ mr: 2 }}
+            >
+              Add to Cart
+            </Button>
+          </Box>
+
+          <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" color="text.secondary" gutterBottom>
               Category: {product.category.name}
             </Typography>
@@ -126,6 +150,21 @@ function ProductDetailPage() {
           </Typography>
         </Grid>
       </Grid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Added to cart!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
